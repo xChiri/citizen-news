@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+   <h2>Withdraw your money</h2>
+   <h3>Account balance: {{user.money}}$</h3>
+    {{form_start(form)}}
+    {{form_widget(form)}}
+    {{form_end(form)}}
+    <a href="/myprofile" class="btn btn-link">Back to my profile</a>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>{{news.title}} in {{news.place}}</h1>
+    <img src="/photo/{{news.title}}" width="500em"/>
+    <h4>{{news.content}}</h4>
+    <h5> Uploaded by: <a href="profile/{{news.uploaderId}}">{{news.uploadedBy}}</a> at: {{news.uploadDate|date('F j, Y, g:i a')}}</h5>
+    {% if news.bought == false %}
+    <h3>Price: {{news.price}}$</h3>
+    {% if type is defined and type starts with 'N' %}<a href="/buy/{{news.id}}" class="btn btn-success">Buy the right for these news</a> {% endif %}
+    {% else %}
+        <h3>Already Bought! <a href="profile/{{news.buyerId}}"> {{news.boughtBy}} </a> has the rights for these news!</h3>
+    {% endif %}
+    
+    {% if name is defined and news.boughtBy|lower != name|lower %}
+        <h3>Leave a comment:</h3>
+        {{form_start(form)}}
+        {{form_widget(form)}}
+        {{form_end(form)}}
+        <p></p>
+    {% endif %}
+    {% set com = false%}
+    {% for i in comments %} {%if i.newsId == id %} {% set com = true %} {% endif %}{%endfor %}
+    {% if com == true %}
+    <h3>Comments:</h3>
+    {%else%}
+        <h3>Not comments left yet!</h3>
+        {%endif%}
+        {% for i in comments %}
+            {% if i.newsId == id %}
+            <div class="alert alert-info"><h4>{{i.letBy}} at {{i.uploadedAt|date('F j, Y, g:i a')}}</h4>
+                <p>{{i.content}}</p>
+                {% if name is defined %}
+                {%if name|lower == news.uploadedBy|lower or name|lower == i.letBy|lower or name|lower == news.boughtBy|lower %} <a href="/deletecomment/{{i.id}}" class="btn btn-danger" >Delete your comment</a> {%endif %} </div>
+                {% endif %}
+                <p></p>
+            {% endif %}
+        {%endfor %}    
+   
+    
+{% endblock %}
